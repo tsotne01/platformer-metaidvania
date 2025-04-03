@@ -11,11 +11,11 @@ class Game {
 
   draw() {
     this.player.draw();
-    this.player.update();
   }
-
+  
   update() {
     this.ctx.clearRect(0,0,this.WIDTH,this.HEIGHT);
+    this.player.update();
     this.draw()
     requestAnimationFrame(this.update.bind(this));
   }
