@@ -6,6 +6,14 @@ class Game {
         this.ctx = this.canvas.getContext("2d");
         console.log(this.ctx);
     }
+    
+    draw(){
+
+    }
+
+    update(){
+
+    }
 }
 
 
