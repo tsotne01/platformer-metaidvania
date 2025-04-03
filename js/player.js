@@ -1,11 +1,11 @@
 /** @type {HTMLCanvasElement} */
-import { gravity } from "./constants.js";
+import { gravity, playerSpiteHeight, playerSpiteWidth } from "./constants.js";
 import { InputHandler } from "./input.js";
 
 export class Player {
   constructor(ctx) {
-    this.width = 16 * 6;
-    this.height = 16 * 6;
+    this.width = playerSpiteWidth * 6;
+    this.height = playerSpiteHeight * 6;
     this.ctx = ctx;
     this.x = 0;
     this.y = window.innerHeight - this.height;
@@ -14,8 +14,6 @@ export class Player {
     this.jumpStrenght = 30;
     this.keyHandler = new InputHandler();
     this.playerImage = new Image();
-    this.playerImage.src =
-      "../assets/herochar-sprites/herochar_idle_anim_strip_4.png";
     this.STATES = {
       idle: {
         name: "idle",
@@ -49,6 +47,7 @@ export class Player {
       },
     };
     this.state = this.STATES.idle;
+    this.playerImage.src = this.state.src;
   }
 
   draw() {
@@ -79,7 +78,7 @@ export class Player {
     if (this.keyHandler.getPressedKey("ArrowLeft")) {
       // change state to runing
       this.state = this.STATES.run;
-      this.changeImageSource();
+      this.changeImageSource(this.state.src);
       this.x = Math.max(0, this.x - this.speed);
     } else if (this.keyHandler.getPressedKey("ArrowRight")) {
       // change state to runing
