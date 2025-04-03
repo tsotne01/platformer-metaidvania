@@ -20,7 +20,6 @@ export class InputHandler {
   }
 
   handleKeyUpp(e) {
-    // console.log(e.code);
     if (e.code) {
       this.keyPressed.delete(e.code);
     }
