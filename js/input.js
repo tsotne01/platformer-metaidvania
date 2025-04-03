@@ -4,6 +4,7 @@ export class InputHandler {
   constructor(target = window) {
     this.target = target;
     this.keyPressed = new Set();
+    this.handledKeys = ["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight","Space"];
     this.addEvenListeners();
   }
 
@@ -13,17 +14,17 @@ export class InputHandler {
   }
 
   handleKeyDown(e) {
-    if (e.code) {
+    e.preventDefault();
+    if (this.handledKeys.includes(e.code)) {
       this.keyPressed.add(e.code);
     }
-    e.preventDefault();
   }
 
   handleKeyUpp(e) {
+    e.preventDefault();
     if (e.code) {
       this.keyPressed.delete(e.code);
     }
-    e.preventDefault();
   }
 
   getPressedKey(keycode) {

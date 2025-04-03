@@ -28,5 +28,5 @@ class Game {
 document.addEventListener("DOMContentLoaded", () => {
   const game = new Game();
   game.update();
-  window.onresize = ()=>game.resize().bind(this);
+  window.onresize = ()=>game.resize();
 });
