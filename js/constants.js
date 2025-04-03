@@ -1,0 +1,1 @@
+//# Game-wide constants (gravity, player speed, etc. - optional)
