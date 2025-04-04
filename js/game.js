@@ -1,5 +1,6 @@
 import { Player } from "./player.js";
-import { Goblin } from "./enemies/goblin.js"
+import { Goblin } from "./enemies/goblin.js";
+import { Collision } from "./collision.js";
 
 class Game {
   constructor() {
@@ -9,23 +10,38 @@ class Game {
     this.HEIGHT = this.canvas.height = window.innerHeight;
     this.player = new Player(this.ctx);
     this.enemies = [];
-
+    this.collistion = new Collision();
     this.enemies.push(new Goblin(this.ctx, 300, this.HEIGHT - 100));
+    this.enemies.push(new Goblin(this.ctx, 300, this.HEIGHT - 100));
+    window.onresize = () => this.resize();
   }
 
   draw() {
     this.player.draw();
   }
+  gameOver() {
+    console.log("GAME OVER !");
+  }
 
   run() {
+    if (this.player.health < 0) {
+      this.gameOver();
+      return;
+    }
     this.ctx.clearRect(0, 0, this.WIDTH, this.HEIGHT);
-    this.player.update();
     this.draw();
-    this.enemies.forEach(enemy => {
+    this.player.update();
+    this.enemies.forEach((enemy, index) => {
       enemy.update();
-      
-      if (enemy.checkCollision(this.player)) {
-        enemy.takeDamage(12); // any value (should be variable)
+
+      if (this.collistion.checkCollision(this.player, enemy)) {
+        if (this.player.state == this.player.STATES.attack) {
+          enemy.takeDamage(12); // any value (should be variable)
+        }
+        this.player.getHit(5);
+      }
+      if (enemy.health < 0) {
+        this.enemies.splice(index, 1);
       }
     });
     requestAnimationFrame(this.run.bind(this));
@@ -39,5 +55,4 @@ class Game {
 document.addEventListener("DOMContentLoaded", () => {
   const game = new Game();
   game.run();
-  window.onresize = ()=>game.resize();
 });
