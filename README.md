@@ -35,12 +35,13 @@ A collaborative educational project for learning game development fundamentals u
 
 ## 👥 Team
 
-| Role               | Member         |
-|--------------------|----------------|
-| Gameplay Programmer| @teamMember1   |
-| UI/UX Designer     | @teamMember2   |
-| Level Designer     | @teamMember3   |
-| QA Tester          | @teamMember4   |
+## 👥 Team Members
+
+| Role                | Member       |
+|---------------------|-------------|
+| Player Developer   | [@tsotne](https://github.com/tsotne01) |
+| Enemy System Dev   | [@nukri](https://github.com/nukri060) |
+
 
 ## 🎮 Game Features
 
@@ -59,7 +60,7 @@ A collaborative educational project for learning game development fundamentals u
 
 ## 🏗 Architecture
 ```
-your-game-project-name/
+platformer-metaidvania/
 ├── index.html             # The main HTML file that loads the game
 ├── README.md              # Project description, setup instructions (optional but good)
 │

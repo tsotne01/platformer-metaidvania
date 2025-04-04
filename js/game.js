@@ -16,12 +16,11 @@ class Game {
   draw() {
     this.player.draw();
   }
-  
-  update() {
-    this.ctx.clearRect(0,0,this.WIDTH,this.HEIGHT);
+
+  run() {
+    this.ctx.clearRect(0, 0, this.WIDTH, this.HEIGHT);
     this.player.update();
     this.draw();
-
     this.enemies.forEach(enemy => {
       enemy.update();
       
@@ -29,11 +28,16 @@ class Game {
         enemy.takeDamage(12); // any value (should be variable)
       }
     });
-    requestAnimationFrame(this.update.bind(this));
+    requestAnimationFrame(this.run.bind(this));
+  }
+
+  resize() {
+    this.WIDTH = this.canvas.width = window.innerWidth;
+    this.HEIGHT = this.canvas.height = window.innerHeight;
   }
 }
 document.addEventListener("DOMContentLoaded", () => {
   const game = new Game();
-  game.update();
-
+  game.run();
+  window.onresize = ()=>game.resize();
 });
