@@ -21,7 +21,7 @@ export class Enemy {
     this.ctx.fillStyle = this.color;
     this.ctx.fillRect(this.x, this.y, this.width, this.height);
     
-    // Health bar
+    // Draw the health bar above the enemy if health is less than max health
     if (this.health < this.maxHealth) {
       const healthPercentage = this.health / this.maxHealth;
       this.ctx.fillStyle = 'red';
@@ -31,12 +31,15 @@ export class Enemy {
     }
   }
 
+   // Method to apply damage to the enemy
   takeDamage(amount) {
-    if (this.isInvulnerable) return false;
+    if (this.isInvulnerable) return false; // If the enemy is invulnerable, ignore further damage
     
     this.health -= amount;
     this.isInvulnerable = true;
     this.invulnerableTimer = 20;
+
+    // This mechanism prevents multiple damage in a single moment of time
     
     if (this.health <= 0) {
       this.isActive = false;
@@ -45,6 +48,7 @@ export class Enemy {
     return false;
   }
 
+  // Method to check if the enemy has been hit by an attack (e.g., from the player)
   checkHitCollision(attack) {
     return this.checkCollision(attack);
   }
@@ -58,15 +62,16 @@ export class Enemy {
     if (!this.isActive) return;
     
     if (this.isInvulnerable) {
-      this.invulnerableTimer--;
+      this.invulnerableTimer--; // Decrease the invulnerability timer on each frame
       if (this.invulnerableTimer <= 0) {
-        this.isInvulnerable = false;
+        this.isInvulnerable = false; // When the timer expires, the enemy becomes vulnerable again
       }
     }
     
     this.draw();
   }
 
+  // Method to check if the enemy collides with the player or another object
   checkCollision(player) {
     if (!this.isActive) return false;
     return (
