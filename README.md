@@ -60,7 +60,7 @@ A collaborative educational project for learning game development fundamentals u
 
 ## 🏗 Architecture
 ```
-your-game-project-name/
+platformer-metaidvania/
 ├── index.html             # The main HTML file that loads the game
 ├── README.md              # Project description, setup instructions (optional but good)
 │
