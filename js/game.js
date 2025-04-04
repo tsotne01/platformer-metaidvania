@@ -26,7 +26,7 @@ class Game {
       enemy.update();
       
       if (enemy.checkCollision(this.player)) {
-        console.log("Player hit enemy!");
+        enemy.takeDamage(12); // any value (should be variable)
       }
     });
     requestAnimationFrame(this.update.bind(this));
