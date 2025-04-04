@@ -22,7 +22,7 @@ export class Player {
       },
       run: {
         name: "run",
-        frames: 7,
+        frames: 6,
         src: "../assets/herochar-sprites/herochar_run_anim_strip_6.png",
       },
       dead: {
@@ -48,22 +48,23 @@ export class Player {
     };
     this.state = this.STATES.idle;
     this.playerImage.src = this.state.src;
+    this.currentFrame = 0;
   }
 
-  draw() {
-    for (let i = 0; i < this.state.frames; i++) {
-      this.ctx.drawImage(
-        this.playerImage,
-        16 * i,
-        0,
-        15,
-        16,
-        this.x,
-        this.y,
-        this.width,
-        this.height
-      );
-    }
+  draw(time) {
+    this.ctx.drawImage(
+      this.playerImage,
+      16 * this.currentFrame,
+      0,
+      15,
+      16,
+      this.x,
+      this.y,
+      this.width,
+      this.height
+    );
+    this.currentFrame++;
+    if (this.currentFrame >= this.state.frames) this.currentFrame = 0;
   }
 
   isOnGround() {
@@ -78,32 +79,35 @@ export class Player {
     if (this.keyHandler.getPressedKey("ArrowLeft")) {
       // change state to runing
       this.state = this.STATES.run;
-      this.changeImageSource(this.state.src);
       this.x = Math.max(0, this.x - this.speed);
-    } else if (this.keyHandler.getPressedKey("ArrowRight")) {
+    }
+    if (this.keyHandler.getPressedKey("ArrowRight")) {
       // change state to runing
       this.state = this.STATES.run;
-      this.changeImageSource(this.state.src);
-      this.state = this.STATES.run;
       this.x = Math.min(window.innerWidth - this.width, this.x + this.speed);
-    } else if (this.keyHandler.getPressedKey("ArrowDown")) {
-      //   this.y = Math.min(this.y + this.speed, window.innerHeight - this.height);
-    } else if (this.keyHandler.getPressedKey("ArrowUp") && this.isOnGround()) {
-      this.state = this.STATES.jumpup;
-      this.changeImageSource(this.state.src);
-      this.velocityY = -this.jumpStrenght;
-    } else if (this.keyHandler.getPressedKey("Space")) {
-      this.state = this.STATES.attack;
-      this.changeImageSource(this.state.src);
-    } else {
-      this.state = this.STATES.idle;
-      this.changeImageSource(this.state.src);
     }
+    if (this.keyHandler.getPressedKey("ArrowDown")) {
+      //   this.y = Math.min(this.y + this.speed, window.innerHeight - this.height);
+    }
+    if (this.keyHandler.getPressedKey("ArrowUp") && this.isOnGround()) {
+      this.state = this.STATES.jumpup;
+      this.velocityY = -this.jumpStrenght;
+    }
+    if (this.keyHandler.getPressedKey("Space")) {
+      this.state = this.STATES.attack;
+    }
+    if(!this.keyHandler.getPressedKeys().size){
+        this.state = this.STATES.idle;
+    }
+    
+    this.changeImageSource(this.state.src);
 
     this.y += this.velocityY;
     if (!this.isOnGround()) {
+      this.speed = 10;
       this.velocityY += gravity;
     } else {
+      this.speed = 5;
       this.velocityY = 0;
     }
     if (this.y > window.innerHeight - this.height)

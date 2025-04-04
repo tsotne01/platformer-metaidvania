@@ -30,4 +30,7 @@ export class InputHandler {
   getPressedKey(keycode) {
     return this.keyPressed.has(keycode);
   }
+  getPressedKeys(){
+    return this.keyPressed;
+  }
 }

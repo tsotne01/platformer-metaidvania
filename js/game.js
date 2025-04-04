@@ -13,11 +13,11 @@ class Game {
     this.player.draw();
   }
 
-  update() {
+  run() {
     this.ctx.clearRect(0, 0, this.WIDTH, this.HEIGHT);
     this.player.update();
     this.draw();
-    requestAnimationFrame(this.update.bind(this));
+    requestAnimationFrame(this.run.bind(this));
   }
 
   resize() {
@@ -27,6 +27,6 @@ class Game {
 }
 document.addEventListener("DOMContentLoaded", () => {
   const game = new Game();
-  game.update();
+  game.run();
   window.onresize = ()=>game.resize();
 });
