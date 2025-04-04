@@ -1,4 +1,4 @@
-import { GameHeight, gravity } from "../constants.js";
+import { gravity } from "../constants.js";
 import { Physics } from "../rigidBody2d.js";
 
 export class Enemy {
@@ -16,6 +16,7 @@ export class Enemy {
     this.invulnerableTimer = 0;
     this.scoreValue = 50;
     this.damage = 10;
+    this.velocityY = 0;
     this.physics = new Physics(gravity);
   }
 
@@ -61,10 +62,9 @@ export class Enemy {
     this.isActive = false;
     // TODO: add a death animation
   }
-  isOnGround(){
-    return (
-      this.y > GameHeight - this.height
-    );
+
+  isOnGround() {
+    return this.y >= window.innerHeight - this.height;
   }
 
   update() {
@@ -77,6 +77,7 @@ export class Enemy {
       }
     }
 
+    this.physics.applyGravity(this);
     this.draw();
   }
 
