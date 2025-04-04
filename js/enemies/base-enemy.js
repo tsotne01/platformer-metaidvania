@@ -11,6 +11,8 @@ export class Enemy {
     this.maxHealth = 100;
     this.isInvulnerable = false;
     this.invulnerableTimer = 0;
+    this.scoreValue = 50;
+    this.damage = 10;
   }
 
   draw() {
@@ -41,6 +43,15 @@ export class Enemy {
       return true;
     }
     return false;
+  }
+
+  checkHitCollision(attack) {
+    return this.checkCollision(attack);
+  }
+
+  die() {
+    this.isActive = false;
+    // TODO: add a death animation
   }
 
   update() {
