@@ -31,12 +31,13 @@ class Game {
     this.ctx.clearRect(0, 0, this.WIDTH, this.HEIGHT);
     this.draw();
     this.player.update();
+    
     this.enemies.forEach((enemy, index) => {
-      enemy.update();
-
+      enemy.update(this.player); 
+  
       if (this.collistion.checkCollision(this.player, enemy)) {
         if (this.player.state == this.player.STATES.attack) {
-          enemy.takeDamage(12); // any value (should be variable)
+          enemy.takeDamage(12);
         }
         this.player.getHit(5);
       }

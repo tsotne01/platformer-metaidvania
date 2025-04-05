@@ -67,16 +67,16 @@ export class Enemy {
     return this.y >= window.innerHeight - this.height;
   }
 
-  update() {
+  update(player = null) {  
     if (!this.isActive) return;
-
+  
     if (this.isInvulnerable) {
-      this.invulnerableTimer--; // Decrease the invulnerability timer on each frame
+      this.invulnerableTimer--;
       if (this.invulnerableTimer <= 0) {
-        this.isInvulnerable = false; // When the timer expires, the enemy becomes vulnerable again
+        this.isInvulnerable = false;
       }
     }
-
+  
     this.physics.applyGravity(this);
     this.draw();
   }
