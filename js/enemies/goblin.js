@@ -6,36 +6,44 @@ export class Goblin extends Enemy {
     this.speed = 2;
     this.direction = 1;
     this.moveDistance = 100;
-    this.startX = x;
+    this.startX = this.x;
     this.detectionRadius = 200;
     this.isChasing = false;
   }
 
-  update(player) {
-    if (!this.isActive) return;
-
-    const dx = player.x - this.x;
-    const dy = player.y - this.y;
+  playerDetected(obj) {
+    const dx = obj.x - this.x;
+    const dy = obj.y - this.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance <= this.detectionRadius) {
-      this.isChasing = true;
-      
-      const normX = dx / distance;
-      const normY = dy / distance;
-      
-      this.x += normX * this.speed;
-      this.y += normY * this.speed;
-      
-      this.direction = normX > 0 ? 1 : -1;
+        this.isChasing = true;
+        
+        const normX = dx / distance;
+        const normY = dy / distance;
+        
+        this.x += normX * this.speed;
+        this.y += normY * this.speed;
+        
+        this.direction = normX > 0 ? 1 : -1;
+        this.startX = this.x;
     } else {
-      this.isChasing = false;
+        this.isChasing = false; 
+    }
+  }
+
+  update(player) {
+    if (!this.isActive) return;
+    
+    this.playerDetected(player);
+
+    if(!this.isChasing){
       this.x += this.speed * this.direction;
-      
       if (Math.abs(this.x - this.startX) > this.moveDistance) {
         this.direction *= -1;
       }
     }
+  
 
     super.update(player);
   }
