@@ -7,8 +7,10 @@ class Game {
   constructor() {
     this.canvas = document.querySelector("#game");
     this.ctx = this.canvas.getContext("2d");
-    this.WIDTH = this.canvas.width = window.innerWidth;
-    this.HEIGHT = this.canvas.height = window.innerHeight;
+    this.WIDTH = window.innerWidth;
+    this.HEIGHT = window.innerHeight;
+    this.canvas.height = window.innerHeight;
+    this.canvas.width = window.innerWidth * 4;
 
     this.player = new Player(this.ctx);
     this.enemies = [];
@@ -55,7 +57,6 @@ class Game {
         this.player.y < platform.y + platform.height &&
         this.player.y + this.player.height > platform.y
       ) {
-        
         // Collision from top
         if (
           this.player.velocityY > 0 &&
@@ -79,15 +80,19 @@ class Game {
         else if (this.player.velocityX < 0) {
           this.player.x = platform.x + platform.width + 1;
           this.player.velocityX = 0;
-        } 
+        }
       }
-    })
+    });
   }
 
   run(timestamp = 0) {
     const deltaTime = timestamp - this.lastTime;
     this.lastTime = timestamp;
-
+    this.ctx.save();
+    this.ctx.translate(
+      this.WIDTH / 2 - this.player.x - this.player.width,
+      1
+    );
     if (this.player.health < 0) {
       this.gameOver();
       return;
@@ -116,6 +121,7 @@ class Game {
         this.enemies.splice(index, 1);
       }
     });
+    this.ctx.restore();
 
     requestAnimationFrame(this.run.bind(this));
   }

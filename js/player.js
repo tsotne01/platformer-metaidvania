@@ -60,7 +60,7 @@ export class Player {
       },
       attack: {
         name: "attack",
-        frames: 5,
+        frames: 4,
         src: "../assets/herochar-sprites/herochar_attack_anim_strip_4(new).png",
         speed: 70,
       },
@@ -98,6 +98,7 @@ export class Player {
   }
 
   update() {
+
     if (this.keyHandler.getPressedKey("ArrowLeft")) {
       this.state = this.STATES.run;
       this.x = Math.max(0, this.x - this.velocityX);
