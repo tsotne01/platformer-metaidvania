@@ -26,7 +26,7 @@ export class Player {
     this.health = 100;
     this.maxHealth = 100;
     this.isJumping = false;
-
+    this.reverse = false;
     this.STATES = {
       idle: {
         name: "idle",
@@ -36,7 +36,7 @@ export class Player {
       },
       run: {
         name: "run",
-        frames: 6,
+        frames: 5,
         src: "../assets/herochar-sprites/herochar_run_anim_strip_6.png",
         speed: 80,
       },
@@ -54,7 +54,7 @@ export class Player {
       },
       jumpup: {
         name: "jumpup",
-        frames: 4,
+        frames: 3,
         src: "../assets/herochar-sprites/herochar_jump_up_anim_strip_3.png",
         speed: 100,
       },
@@ -71,7 +71,7 @@ export class Player {
   }
 
   draw(deltaTime) {
-    this.animation.animate(this, deltaTime);
+    this.animation.animate(this, deltaTime,this.reverse);
 
     if (this.health < this.maxHealth) {
       const healthPercentage = this.health / this.maxHealth;
@@ -101,6 +101,9 @@ export class Player {
     if (this.keyHandler.getPressedKey("ArrowLeft")) {
       this.state = this.STATES.run;
       this.x = Math.max(0, this.x - this.velocityX);
+      this.reverse = true
+    }else{
+      this.reverse = false;
     }
     if (this.keyHandler.getPressedKey("ArrowRight")) {
       this.state = this.STATES.run;

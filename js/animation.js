@@ -8,7 +8,7 @@ export class Animation {
     this.frameTimer = 0;
   }
 
-  animate(character, deltaTime) {
+  animate(character, deltaTime,reverse) {
     if (this.character !== character) {
       this.character = character;
       this.currentFrame = 0;
@@ -25,18 +25,19 @@ export class Animation {
         this.currentFrame = 0;
       }
     }
-
+    this.ctx.save()
+    this.ctx.scale(reverse ? -1 : 1,1);
     this.ctx.drawImage(
       this.character.playerImage,
       this.character.sourceWidth * this.currentFrame,
       0,
       this.character.sourceWidth,
       this.character.sourceHeight,
-      this.character.x,
+      reverse ? -this.character.x: this.character.x,
       this.character.y,
-      this.character.width,
+      reverse ? -this.character.width : this.character.width,
       this.character.height
     );
+    this.ctx.restore();
   }
 }
-
