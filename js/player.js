@@ -14,6 +14,7 @@ export class Player {
     this.y = window.innerHeight - this.height;
     this.speed = 2;
     this.velocityY = 0;
+    this.velocityX = 2;
     this.jumpStrenght = 30;
     this.keyHandler = new InputHandler();
     this.playerImage = new Image();
@@ -24,6 +25,7 @@ export class Player {
     this.inVulnerableTime = 10;
     this.health = 100;
     this.maxHealth = 100;
+    this.isJumping = false;
 
     this.STATES = {
       idle: {
@@ -98,13 +100,14 @@ export class Player {
   update() {
     if (this.keyHandler.getPressedKey("ArrowLeft")) {
       this.state = this.STATES.run;
-      this.x = Math.max(0, this.x - this.speed);
+      this.x = Math.max(0, this.x - this.velocityX);
     }
     if (this.keyHandler.getPressedKey("ArrowRight")) {
       this.state = this.STATES.run;
-      this.x = Math.min(window.innerWidth - this.width, this.x + this.speed);
+      this.x = Math.min(window.innerWidth - this.width, this.x + this.velocityX);
     }
-    if (this.keyHandler.getPressedKey("ArrowUp") && this.isOnGround()) {
+    if (this.keyHandler.getPressedKey("ArrowUp") && !this.isJumping) {
+      this.isJumping = true;
       this.state = this.STATES.jumpup;
       this.velocityY = -this.jumpStrenght;
     }
@@ -122,7 +125,9 @@ export class Player {
       this.isVulnerable = true;
       this.inVulnerableTime = 20;
     }
-
+    if(this.isOnGround()){
+      this.isJumping = false;
+    }
     this.changeImageSource(this.state.src);
     this.physics.applyGravity(this);
   }
