@@ -1,12 +1,76 @@
 import { Enemy } from './base-enemy.js';
+import { Animation } from "../animation.js";
+import { playerSpiteHeight, playerSpiteWidth } from "../constants.js";
 
 export class Goblin extends Enemy {
     constructor(ctx, x, y) {
-        super(ctx, x, y, 32, 32, '#aa55ff');
+        super(ctx, x, y, playerSpiteWidth * 6, playerSpiteHeight * 6, '#aa55ff');
         this.speed = 2;
         this.direction = 1;
         this.moveDistance = 100;
+        this.sourceWidth = 16;
+        this.sourceHeight = 16;
         this.startX = this.x;
+        this.playerImage = new Image();
+        this.animation = new Animation(ctx);
+        this.reverse = false;
+        this.STATES = {
+            idle: {
+                name: "idle",
+                frames: 3,
+                src: "../assets/enemies sprites/goblin/goblin_idle_anim_strip_4.png",
+                speed: 200,
+            },
+            run: {
+                name: "run",
+                frames: 5,
+                src: "../assets/enemies sprites/goblin/goblin_run_anim_strip_6.png",
+                speed: 80,
+            },
+            dead: {
+                name: "dead",
+                frames: 5,
+                src: "../assets/enemies sprites/goblin/goblin_death_anim_strip_6.png",
+                speed: 150,
+            },
+            gethit: {
+                name: "gethit",
+                frames: 2,
+                src: "../assets/enemies sprites/goblin/goblin_hit_anim_strip_3.png",
+                speed: 100,
+            },
+            attack: {
+                name: "attack",
+                frames: 3,
+                src: "../assets/enemies sprites/goblin/goblin_attack_anim_strip_4.png",
+                speed: 70,
+            },
+        };
+        this.state = this.STATES.idle;
+        this.playerImage.src = this.state.src;
+        this.health = 100;
+        this.maxHealth = 100;
+    }
+
+    draw(deltaTime) {
+        if (!this.isActive) return;
+
+        this.animation.animate(this, deltaTime, this.reverse);
+
+        if (this.health < this.maxHealth) {
+            const healthPercentage = this.health / this.maxHealth;
+            this.ctx.fillStyle = "red";
+            this.ctx.fillRect(this.x, this.y - 5, this.width, 3);
+            this.ctx.fillStyle = "green";
+            this.ctx.fillRect(this.x, this.y - 5, this.width * healthPercentage, 3);
+        }
+
+        if (this.isChasing) {
+            this.ctx.fillStyle = 'red';
+            this.ctx.fillRect(this.x, this.y - 10, 10, 5);
+        }
+
+        super.draw();
     }
 
     update(player) {
@@ -17,22 +81,17 @@ export class Goblin extends Enemy {
             if (Math.abs(this.x - this.startX) > this.moveDistance) {
                 this.direction *= -1;
             }
+            this.state = this.STATES.run;
+            this.reverse = this.direction < 0;
+        } else {
+            this.state = this.STATES.run;
+            this.reverse = this.x > player.x;
         }
 
+        this.changeImageSource(this.state.src);
         super.update(player);
     }
-
-    draw() {
-        if (!this.isActive) return;
-
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.x, this.y, this.width, this.height);
-
-        if (this.isChasing) {
-            this.ctx.fillStyle = 'red';
-            this.ctx.fillRect(this.x, this.y - 10, 10, 5);
-        }
-
-        super.draw();
+    changeImageSource(src) {
+        this.playerImage.src = src;
     }
 }

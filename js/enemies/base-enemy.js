@@ -29,8 +29,8 @@ export class Enemy {
     draw() {
         if (!this.isActive) return;
 
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        // this.ctx.fillStyle = this.color;
+        // this.ctx.fillRect(this.x, this.y, this.width, this.height);
 
         if (this.health < this.maxHealth) {
             const healthPercentage = this.health / this.maxHealth;
