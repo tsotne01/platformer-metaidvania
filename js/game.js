@@ -43,6 +43,11 @@ class Game {
 
     // Draw player
     this.player.draw(deltaTime);
+
+    // Draw enemies
+    this.enemies.forEach(enemy => {
+      enemy.draw(deltaTime);
+    });
   }
 
   gameOver() {

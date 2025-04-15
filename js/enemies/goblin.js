@@ -14,6 +14,7 @@ export class Goblin extends Enemy {
         this.playerImage = new Image();
         this.animation = new Animation(ctx);
         this.reverse = false;
+        this.isMoving = false;
         this.STATES = {
             idle: {
                 name: "idle",
@@ -47,13 +48,22 @@ export class Goblin extends Enemy {
             },
         };
         this.state = this.STATES.idle;
-        this.playerImage.src = this.state.src;
+        this.loadImage(this.state.src);
         this.health = 100;
         this.maxHealth = 100;
     }
 
+    loadImage(src) {
+        this.playerImage = new Image();
+        this.playerImage.onload = () => {
+            this.imageLoaded = true;
+        };
+        this.playerImage.src = src;
+        this.imageLoaded = false;
+    }
+
     draw(deltaTime) {
-        if (!this.isActive) return;
+        if (!this.isActive || !this.imageLoaded) return;
 
         this.animation.animate(this, deltaTime, this.reverse);
 
@@ -76,22 +86,31 @@ export class Goblin extends Enemy {
     update(player) {
         if (!this.isActive) return;
 
+        this.isMoving = false;
+        
         if (!this.isChasing) {
             this.x += this.speed * this.direction;
             if (Math.abs(this.x - this.startX) > this.moveDistance) {
                 this.direction *= -1;
             }
-            this.state = this.STATES.run;
+            this.isMoving = true;
             this.reverse = this.direction < 0;
         } else {
-            this.state = this.STATES.run;
+            this.isMoving = true;
             this.reverse = this.x > player.x;
         }
 
-        this.changeImageSource(this.state.src);
+        // Update state based on movement
+        if (this.isMoving) {
+            this.state = this.STATES.run;
+        } else {
+            this.state = this.STATES.idle;
+        }
+
+        if (this.state.src !== this.playerImage.src) {
+            this.loadImage(this.state.src);
+        }
+
         super.update(player);
-    }
-    changeImageSource(src) {
-        this.playerImage.src = src;
     }
 }
